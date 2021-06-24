@@ -4,9 +4,9 @@
 #define posYPin A4 //+y     high: 977     low: 59
 #define negYPin A5 //-y     high: 968     low: 77
 #define posXPin A0 //+x     high: 958     low: 71
-#define negXPin A2 //-x     high: 954     low: 83
-#define posZPin A3 //+z     high: 1008    low: 64
-#define negZPin A1 //-z     high: 950     low: 97
+#define negXPin A1 //-x     high: 954     low: 83
+#define posZPin A2 //+z     high: 1008    low: 64
+#define negZPin A3 //-z     high: 950     low: 97
 
 const int steps = 200; //number of steps in one revolution
 
@@ -20,9 +20,9 @@ float negZ0 = 860;
 float diff = 20;
 float zDiff = 40;
 
-Stepper myStepperZ(steps, 28, 27, 29, 30);
-Stepper myStepperX(steps, 18, 17, 19, 20);
-Stepper myStepperY(steps, 22, 23, 24, 25);
+Stepper myStepperZ(steps, 27, 28, 29, 30);
+Stepper myStepperX(steps, 22, 23, 25, 24);
+Stepper myStepperY(steps, 17, 18, 19, 20);
 
 int CounterX = 0;
 int CounterY = 0;
@@ -77,14 +77,14 @@ void setup()
   while (switchZ == LOW)
   {
     switchZ = digitalRead(homeSwitchZ);
-    myStepperZ.step(1);
+    myStepperZ.step(-1);
     delay(5);
   }
   //Serial.println("Z is homed");
 
     int centerCounter = 0;
   while (centerCounter<550){
-    myStepperZ.step(-1);
+    myStepperZ.step(1);
     myStepperY.step(1);
     myStepperX.step(1);
     delay(2);
@@ -184,21 +184,21 @@ void moveXAxis()
   int timeMicros = 0;
   int timeMillis = 0;
 
-  // X+
-  if ((negXRead >= negX0) && (posXRead <= posX0) && (CounterX >= 0))
+  // X-
+  if ((posXRead <= posX0) && (negXRead >= negX0) && (CounterX <= 1050))
   {
-    myStepperX.step(-1);
+    myStepperX.step(1);
     long int negXDelay = (1000000 / (10 + posX0 - posXRead));
     timeMicros = negXDelay % 1000;
     timeMillis = negXDelay / 1000;
     CounterX = CounterX - 1;
   }
 
-  // X-
-  else if ((negXRead <= negX0) && (posXRead >= posX0) && (CounterX <= 1000))
+  // X+
+  else if ((posXRead >= posX0) && (negXRead <= negX0) && (CounterX >= 0))
   {
 
-    myStepperX.step(1);
+    myStepperX.step(-1);
     long int posXDelay = (1000000 / (10 + negX0 - negXRead));
     timeMicros = posXDelay % 1000;
     timeMillis = posXDelay / 1000;
@@ -221,23 +221,23 @@ void moveZAxis()
   int timeMillis = 0;
 
   // Z+
-  if ((posZRead <= posZ0) && (negZRead >= negZ0) && (CounterZ >= 0))
+  if ((posZRead <= posZ0) && (negZRead >= negZ0) && (CounterZ <= 2000))
   {
     myStepperZ.step(1);
     long int posZDelay = (1000000 / (10 + posZ0 - posZRead));
     timeMicros = posZDelay % 1000;
     timeMillis = posZDelay / 1000;
-    CounterZ = CounterZ - 1;
+    CounterZ = CounterZ + 1;
   }
 
   // Z-
-  else if ((posZRead >= posZ0) && (negZRead <= negZ0) && (CounterZ <= 4000))
+  else if ((posZRead >= posZ0) && (negZRead <= negZ0) && (CounterZ >= 0))
   {
     myStepperZ.step(-1);
     long int negZDelay = (1000000 / (10 + negZ0 - negZRead));
     timeMicros = negZDelay % 1000;
     timeMillis = negZDelay / 1000;
-    CounterZ = CounterZ + 1;
+    CounterZ = CounterZ - 1;
   }
 
   if (timeMicros || timeMillis)
