@@ -103,10 +103,10 @@ void setup()
 
 void loop()
 {
-  pushButton();
+ // pushButton();
   moveYAxis();
-  moveXAxis();
-  moveZAxis();
+ // moveXAxis();
+//  moveZAxis();
 }
 
 void pushButton()
