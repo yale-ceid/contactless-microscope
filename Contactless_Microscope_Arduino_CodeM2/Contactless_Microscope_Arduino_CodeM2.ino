@@ -93,12 +93,57 @@ void setup()
     CounterZ++;
   }
 
-  posY0 = -diff + analogRead(posYPin); //move in the + direction
-  negY0 = -diff + analogRead(negYPin); //move in the - direction
-  posX0 = -diff + analogRead(posXPin);
-  negX0 = -diff + analogRead(negXPin);
-  posZ0 = -zDiff + analogRead(posZPin); //move in the + direction
-  negZ0 = -zDiff + analogRead(negZPin); //move in the - direction
+  //Average n readings of all sensors
+  float totalForwardValue = 0;
+  float totalBackwardValue = 0;
+  float totalLeftValue = 0;
+  float totalRightValue = 0;
+  float totalUpValue = 0;
+  float totalDownValue = 0;
+  int ForwardValue;
+  int BackwardValue;
+  int LeftValue;
+  int RightValue;
+  int UpValue;
+  int DownValue;
+  
+  int n = 100;
+  for(int i=0; i<(n-1); i++)
+  {
+    //Forward
+    ForwardValue = analogRead(posYPin);
+    totalForwardValue = totalForwardValue + ForwardValue;
+    //Forward
+    BackwardValue = analogRead(negYPin);
+    totalBackwardValue = totalBackwardValue + BackwardValue;
+    //Left
+    LeftValue = analogRead(negXPin);
+    totalLeftValue = totalLeftValue + LeftValue;
+    //Right
+    RightValue = analogRead(posXPin);
+    totalRightValue = totalRightValue + RightValue;
+    //Up
+    UpValue = analogRead(posZPin);
+    totalUpValue = totalUpValue + UpValue;
+    //Down
+    DownValue = analogRead(negZPin);
+    totalDownValue = totalDownValue + DownValue;
+  }
+  float avgForwardValue = totalForwardValue/n;
+  float avgBackwardValue = totalBackwardValue/n;
+  float avgLeftValue = totalLeftValue/n;
+  float avgRightValue = totalRightValue/n;
+  float avgUpValue = totalUpValue/n;
+  float avgDownValue = totalDownValue/n;
+  
+
+  //Set initial readings for each sensor
+  posY0 = -diff + avgForwardValue; //move in the + direction
+  negY0 = -diff + avgBackwardValue; //move in the - direction
+  posX0 = -diff + avgRightValue;
+  negX0 = -diff + avgLeftValue;
+  posZ0 = -zDiff + avgUpValue; //move in the + direction
+  negZ0 = -zDiff + avgDownValue; //move in the - direction
 }
 
 void loop()
