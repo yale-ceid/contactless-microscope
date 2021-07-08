@@ -23,6 +23,17 @@ void loop() {
   // print out the value you read:
   Serial.print ("Left = ");
   Serial.print (LeftValue);
+  //Average n readings of this sensor
+  float totalValue = 0;
+  int n = 100;
+  for(int i=0; i<(n-1); i++)
+  {
+    LeftValue = analogRead(A5);
+    totalValue = totalValue + LeftValue;
+  }
+  float avgLeftValue = totalValue/n;
+ 
+  
   //Right
   int RightValue = analogRead(A4);
   Serial.print ("Right = ");
@@ -43,6 +54,9 @@ void loop() {
   int BackwardValue = analogRead(A0);
   Serial.print ("Backward = ");
   Serial.print (BackwardValue);
-
+  Serial.println (" ");
+  Serial.print ("Average Left Value is ");
+  Serial.println (avgLeftValue);
+  
   delay(100);        // delay in between reads for stability
 }
