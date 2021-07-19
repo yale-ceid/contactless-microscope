@@ -17,7 +17,7 @@ float posZ0 = 0;
 float negZ0 = 0;
 
 float diff = 20;
-float zDiff = 40;
+float zDiff = 100;
 
 Stepper myStepperZ(steps, 27, 28, 29, 30);
 Stepper myStepperX(steps, 22, 23, 25, 24);
