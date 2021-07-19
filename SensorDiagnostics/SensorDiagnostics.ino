@@ -10,58 +10,92 @@
   https://www.arduino.cc/en/Tutorial/BuiltInExamples/AnalogReadSerial
 */
 
+#define posYPin A2 //+y     high: 977     low: 59
+#define negYPin A0 //-y     high: 968     low: 77
+#define posXPin A4 //+x     high: 958     low: 71
+#define negXPin A5 //-x     high: 954     low: 83
+#define posZPin A1 //+z     high: 1008    low: 64
+#define negZPin A3 //-z     high: 950     low: 97
+
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
 }
+int diff = 20;
+int zDiff = 120;
 
+int posY0 = 0;
+int negY0 = 0;
+int posX0 = 0;
+int negX0 = 0;
+int posZ0 = 0;
+int negZ0 = 0;
 // the loop routine runs over and over again forever:
 void loop() {
-  // read the input on analog pin 0:
-  int LeftValue = analogRead(A0);
-  // print out the value you read:
- // Serial.print (" Left = ");
-  Serial.println (LeftValue);
-  //Average n readings of this sensor
- /* float totalValue = 0;
-  int n = 20;
-  unsigned long timeBefore = millis();
+    //Average n readings of all sensors
+  float totalForwardValue = 0;
+  float totalBackwardValue = 0;
+  float totalLeftValue = 0;
+  float totalRightValue = 0;
+  float totalUpValue = 0;
+  float totalDownValue = 0;
+  int ForwardValue;
+  int BackwardValue;
+  int LeftValue;
+  int RightValue;
+  int UpValue;
+  int DownValue;
+  
+  int n = 100;
   for(int i=0; i<(n-1); i++)
   {
-    LeftValue = analogRead(A0);
-    totalValue = totalValue + LeftValue;
+    //Forward
+    ForwardValue = analogRead(posYPin);
+    totalForwardValue = totalForwardValue + ForwardValue;
+    //Forward
+    BackwardValue = analogRead(negYPin);
+    totalBackwardValue = totalBackwardValue + BackwardValue;
+    //Left
+    LeftValue = analogRead(negXPin);
+    totalLeftValue = totalLeftValue + LeftValue;
+    //Right
+    RightValue = analogRead(posXPin);
+    totalRightValue = totalRightValue + RightValue;
+    //Up
+    UpValue = analogRead(posZPin);
+    totalUpValue = totalUpValue + UpValue;
+    //Down
+    DownValue = analogRead(negZPin);
+    totalDownValue = totalDownValue + DownValue;
   }
-  float avgLeftValue = totalValue/n;
-  unsigned long timeAfter = millis();
-  float timeToRun = (timeAfter - timeBefore);
-  Serial.print (" Time to calculate is ");
-  Serial.println (timeToRun);
- 
+  float avgForwardValue = totalForwardValue/n;
+  float avgBackwardValue = totalBackwardValue/n;
+  float avgLeftValue = totalLeftValue/n;
+  float avgRightValue = totalRightValue/n;
+  float avgUpValue = totalUpValue/n;
+  float avgDownValue = totalDownValue/n;
   
-  //Right
-  int RightValue = analogRead(A4);
-  Serial.print (" Right = ");
-  Serial.print (RightValue);
-  //Up
-  int UpValue = analogRead(A1);
-  Serial.print (" Up = ");
-  Serial.print (UpValue);
-  //Down
-  int DownValue = analogRead(A3);
-  Serial.print (" Down = ");
-  Serial.print (DownValue);
-  //Forward
-  int ForwardValue = analogRead(A2);
-  Serial.print (" Forward = ");
-  Serial.print (ForwardValue);
-  //Backward
-  int BackwardValue = analogRead(A5);
-  Serial.print (" Backward = ");
-  Serial.print (BackwardValue);
-  Serial.println (" ");
-  Serial.print ("Average Left Value is ");
-  Serial.println (avgLeftValue);
-  */
+
+  //Set initial readings for each sensor
+  posY0 = -diff + avgForwardValue; //move in the + direction
+  negY0 = -diff + avgBackwardValue; //move in the - direction
+  posX0 = -diff + avgRightValue;
+  negX0 = -diff + avgLeftValue;
+  posZ0 = -zDiff + avgUpValue; //move in the + direction
+  negZ0 = -zDiff + avgDownValue; //move in the - direction
+  Serial.print ("posY0 is ");
+  Serial.print (posY0);
+  Serial.print (".  negY0 is ");
+  Serial.print (negY0);
+  Serial.print (".  posX0 is ");
+  Serial.print (posX0);
+  Serial.print (".  negX0 is ");
+  Serial.print (negX0);
+  Serial.print (".  posZ0 is ");
+  Serial.print (posZ0);
+  Serial.print (".  negZ0 is ");
+  Serial.println (negZ0);
+  
   delay(50);        // delay in between reads for stability
 }
