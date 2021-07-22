@@ -27,26 +27,6 @@ int CounterX = 0;
 int CounterY = 0;
 int CounterZ = 0;
 
-//Create Variables to Modify Speed
-int basePosY = 400;
-int baseNegY = 400;
-int basePosX = 650;
-int baseNegX = 500;
-
-/*
-//Pedal Setup
-const int pushButtonPin = 7;           // the number of the pushbutton pin
-const int pushButtonDebounceDelay = 50; // the debounce time; increase if the output flickers
-
-// Variables will change:
-int lastSteadyState = LOW;      // the previous steady state from the input pin
-int lastFlickerableState = LOW; // the previous flickerable state from the input pin
-
-// the following variables are unsigned longs because the time, measured in
-// milliseconds, will quickly become a bigger number than can be stored in an int.
-unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
-*/
-
 //Limit Switch Setup
 int switchX;
 int switchY;
@@ -63,7 +43,6 @@ void setup()
   myStepperX.setSpeed(60);
   // initialize the serial port:
   Serial.begin(115200);
- // pinMode(pushButtonPin, INPUT_PULLUP);
   pinMode(homeSwitchX, INPUT_PULLUP);
   while (switchX == LOW)
   {
@@ -152,78 +131,14 @@ void setup()
   negX0 = -diff + avgLeftValue;
   posZ0 = -zDiff + avgUpValue; //move in the + direction
   negZ0 = -zDiff + avgDownValue; //move in the - direction
-
-  //Set base speeds to modify speed
-  basePosY = posY0 * 0.7;
-  baseNegY = negY0 * 0.7;
-  basePosX = posX0 * 0.7;
-  baseNegX = negX0 * 0.7;
-
-  /*
-  Serial.print ("posY0 is ");
-  Serial.print (posY0);
-  Serial.print (".  negY0 is ");
-  Serial.print (negY0);
-  Serial.print (".  posX0 is ");
-  Serial.print (posX0);
-  Serial.print (".  negX0 is ");
-  Serial.print (negX0);
-  Serial.print (".  posZ0 is ");
-  Serial.print (posZ0);
-  Serial.print (".  negZ0 is ");
-  Serial.println (negZ0);
-
-  Serial.print ("basePosY is ");
-  Serial.print (basePosY);
-  Serial.print (". baseNegY is ");
-  Serial.print (baseNegY);
-  Serial.print (". basePosX is ");
-  Serial.print (basePosX);
-  Serial.print (". baseNegX is ");
-  Serial.println (baseNegX);
-  */
 }
 
 void loop()
 {
-  //pushButton();
   moveYAxis();
   moveXAxis();
   moveZAxis();
 }
-
-/* void pushButton()
-{
- // int pushButtonState = digitalRead(pushButtonPin);
-  // check to see if you just pressed the button
-  // (i.e. the input went from LOW to HIGH), and you've waited long enough
-  // since the last press to ignore any noise:
-
-  // If the switch/button changed, due to noise or pressing:
-  if (pushButtonState != lastFlickerableState)
-  {
-    // reset the debouncing timer
-    lastDebounceTime = millis();
-    // save the the last flickerable state
-    lastFlickerableState = pushButtonState;
-  }
-
-  if ((millis() - lastDebounceTime) > pushButtonDebounceDelay)
-  {
-    // whatever the reading is at, it's been there for longer than the debounce
-    // delay, so take it as the actual current state:
-    // if the button state has changed:
-    if (lastSteadyState == HIGH && pushButtonState == LOW)
-      Serial.println("0");
-    else if (lastSteadyState == LOW && pushButtonState == HIGH)
-      Serial.println("1");
-
-    // save the the last steady state
-    lastSteadyState = pushButtonState;
-  }
-  
-} 
-*/
 
 void moveYAxis()
 {
@@ -234,36 +149,20 @@ void moveYAxis()
   int timeMillis = 0;
 
   // Y+
-  if ((posYRead <= posY0) && (negYRead >= negY0) && (CounterY <= 1050) && (posYRead >= basePosY))
+  if ((posYRead <= posY0) && (negYRead >= negY0) && (CounterY <= 1050))
   {
     myStepperY.step(1);
-    long int posYDelay = (1000000 / (10 + posY0 - posYRead));
-    timeMicros = posYDelay % 1000;
-    timeMillis = posYDelay / 1000;
-    CounterY = CounterY + 1;
-  }
-  else if ((posYRead <= posY0) && (negYRead >= negY0) && (CounterY <= 1050) && (posYRead < basePosY))
-  {
-    myStepperY.step(1);
-    long int posYDelay = (1000000 / (10 + posY0 - basePosY));
+    long int posYDelay = (6000000 / (10 + posY0 - posYRead));
     timeMicros = posYDelay % 1000;
     timeMillis = posYDelay / 1000;
     CounterY = CounterY + 1;
   }
 
   // Y-
-  else if ((posYRead >= posY0) && (negYRead <= negY0) && (CounterY >= 0) && (negYRead >= baseNegY))
+  else if ((posYRead >= posY0) && (negYRead <= negY0) && (CounterY >= 0))
   {
     myStepperY.step(-1);
-    long int negYDelay = (1000000 / (10 + negY0 - negYRead));
-    timeMicros = negYDelay % 1000;
-    timeMillis = negYDelay / 1000;
-    CounterY = CounterY - 1;
-  }
-  else if ((posYRead >= posY0) && (negYRead <= negY0) && (CounterY >= 0) && (negYRead < baseNegY))
-  {
-    myStepperY.step(-1);
-    long int negYDelay = (1000000 / (10 + negY0 - baseNegY));
+    long int negYDelay = (6000000 / (10 + negY0 - negYRead));
     timeMicros = negYDelay % 1000;
     timeMillis = negYDelay / 1000;
     CounterY = CounterY - 1;
@@ -285,38 +184,23 @@ void moveXAxis()
   int timeMillis = 0;
 
   // X+
-  if ((negXRead >= negX0) && (posXRead <= posX0) && (CounterX >= 0) && (posXRead >= basePosX))
+  if ((negXRead >= negX0) && (posXRead <= posX0) && (CounterX >= 0))
   {
     myStepperX.step(1);
-    long int posXDelay = (1000000 / (10 + posX0 - posXRead));
-    timeMicros = posXDelay % 1000;
-    timeMillis = posXDelay / 1000;
-    CounterX = CounterX - 1;
-  }
-  else if ((negXRead >= negX0) && (posXRead <= posX0) && (CounterX >= 0) && (posXRead < basePosX))
-  {
-    myStepperX.step(1);
-    long int posXDelay = (1000000 / (10 + posX0 - basePosX));
-    timeMicros = posXDelay % 1000;
-    timeMillis = posXDelay / 1000;
+    long int negXDelay = (7000000 / (10 + posX0 - posXRead));
+    timeMicros = negXDelay % 1000;
+    timeMillis = negXDelay / 1000;
     CounterX = CounterX - 1;
   }
 
   // X-
-  else if ((negXRead <= negX0) && (posXRead >= posX0) && (CounterX <= 1000) && (negXRead >= baseNegX))
+  else if ((negXRead <= negX0) && (posXRead >= posX0) && (CounterX <= 1000))
   {
+
     myStepperX.step(-1);
-    long int negXDelay = (1000000 / (10 + negX0 - negXRead));
-    timeMicros = negXDelay % 1000;
-    timeMillis = negXDelay / 1000;
-    CounterX = CounterX + 1;
-  }
-  else if ((negXRead <= negX0) && (posXRead >= posX0) && (CounterX <= 1000) && (negXRead < baseNegX))
-  {
-    myStepperX.step(-1);
-    long int negXDelay = (1000000 / (10 + negX0 - baseNegX));
-    timeMicros = negXDelay % 1000;
-    timeMillis = negXDelay / 1000;
+    long int posXDelay = (7000000 / (10 + negX0 - negXRead));
+    timeMicros = posXDelay % 1000;
+    timeMillis = posXDelay / 1000;
     CounterX = CounterX + 1;
   }
 
@@ -339,7 +223,7 @@ void moveZAxis()
   if ((posZRead <= posZ0) && (negZRead >= negZ0) && (CounterZ <= 2000))
   {
     myStepperZ.step(1);
-    long int posZDelay = (1000000 / (10 + posZ0 - posZRead));
+    long int posZDelay = (4000000 / (10 + posZ0 - posZRead));
     timeMicros = posZDelay % 1000;
     timeMillis = posZDelay / 1000;
     CounterZ = CounterZ + 1;
@@ -349,7 +233,7 @@ void moveZAxis()
   else if ((posZRead >= posZ0) && (negZRead <= negZ0) && (CounterZ >= 0))
   {
     myStepperZ.step(-1);
-    long int negZDelay = (1000000 / (10 + negZ0 - negZRead));
+    long int negZDelay = (4000000 / (10 + negZ0 - negZRead));
     timeMicros = negZDelay % 1000;
     timeMillis = negZDelay / 1000;
     CounterZ = CounterZ - 1;
