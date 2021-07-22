@@ -210,8 +210,11 @@ if (CounterBee == 1){
   
   
   
-  X = map(xCoordinate, -1, 1101, 1046, 230);
-  Y = map(yCoordinate, -1, 1051, 150, 850);
+  X = map(xCoordinate, -1, 958, 1046, 304);
+  Y = map(yCoordinate, 179, 1051, 850, 150);
+  //Original
+  //X = map(xCoordinate, -1, 1101, 1046, 230);
+  //Y = map(yCoordinate, -1, 1051, 150, 850);
   
   
   //print(X);
