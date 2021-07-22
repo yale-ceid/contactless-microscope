@@ -12,6 +12,12 @@ PImage Bee;
 PImage CheckMark;
 PImage Scroll;
 PImage Letter;
+PImage Forest;
+
+
+String[] fontList = PFont.list();
+
+
 
 float X;
 float Y;
@@ -32,6 +38,9 @@ float CounterBee = 0;
 void setup()
 {
   size(1102, 950);
+  PFont font;
+  font = loadFont("CooperBlack-48.vlw");
+  textFont(font);
   String portName = Serial.list()[0];
   myPort = new Serial(this, portName, 115200);
  Butterfly = loadImage("Butterfly.png");
@@ -41,10 +50,13 @@ void setup()
  CheckMark = loadImage("CheckMark.png");
  Scroll = loadImage("Scroll.png");
  Letter = loadImage("Letter.png");
+ Forest = loadImage("Forest.jpg");
  
 }
 
 void draw(){
+  
+  //printArray(fontList);
   
   if (gameScreen == 0){
     WelcomeScreen();
@@ -61,6 +73,7 @@ void WelcomeScreen(){
   rect(300, 200, 450, 200);
   fill(0);
   textSize(32);
+  image(Forest, 0, 0, 1300, 1300);
   text("Welcome to Arborset Forest,", 305, 225);
   text("a magical place that is home", 305, 265);
   text("to every insect and plant", 305, 305);
