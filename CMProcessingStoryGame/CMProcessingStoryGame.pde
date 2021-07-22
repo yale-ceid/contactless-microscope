@@ -76,6 +76,8 @@ void draw(){
     LetterScreen();
   } else if (gameScreen == 2){
     GameScreen();
+  } else if (gameScreen == 3){
+    EndScreen();
   }
 }
 
@@ -133,6 +135,7 @@ void LetterScreen(){
 
 void GameScreen(){
   background(0);
+  background(173, 216, 230);
   fill(255);
   //rect(300, 150, 750, 700);
   image(Grass, 300, 150, 750, 700);
@@ -220,7 +223,24 @@ if (CounterBee == 1){
   //print(X);
   //println(Y);
   
+  if ((CounterButterfly == 1) && (CounterLeaf == 1) && (CounterFlower == 1) && (CounterBee == 1)){
+    Ending();
+  }
+  
 }
+
+void EndScreen(){
+  background(0);
+  background(173, 216, 230);
+  fill(255, 119, 255);
+  rect(201, 275, 700, 240);
+  textFont(font);
+  fill(0);
+  text("Congratulations!", 328, 330);
+  text("You collected everything", 230, 400);
+  text("and cured the virus!", 285, 470);
+}
+  
 
 void mouseClicked(){
   if ((mouseX < 165) && (mouseX > 90) && (mouseY < 880) && (mouseY > 810) && (gameScreen == 0)){
@@ -240,6 +260,13 @@ void mousePressed(){
 
 void findObjects(){
   gameScreen = 2;
+  //if ((CounterButterfly == 1) && (CounterLeaf == 1) && (CounterFlower == 1) && (CounterBee == 1)){
+  //  Ending();
+  //}
+}
+
+void Ending(){
+  gameScreen = 3;
 }
   
   
