@@ -31,9 +31,10 @@ int CounterZ = 0;
 int basePosY = 400;
 int baseNegY = 400;
 int basePosX = 650;
-int baseNegX = 650;
+int baseNegX = 500;
 
-/*//Pedal Setup
+/*
+//Pedal Setup
 const int pushButtonPin = 7;           // the number of the pushbutton pin
 const int pushButtonDebounceDelay = 50; // the debounce time; increase if the output flickers
 
@@ -151,6 +152,36 @@ void setup()
   negX0 = -diff + avgLeftValue;
   posZ0 = -zDiff + avgUpValue; //move in the + direction
   negZ0 = -zDiff + avgDownValue; //move in the - direction
+
+  //Set base speeds to modify speed
+  basePosY = posY0 * 0.7;
+  baseNegY = negY0 * 0.7;
+  basePosX = posX0 * 0.7;
+  baseNegX = negX0 * 0.7;
+
+  /*
+  Serial.print ("posY0 is ");
+  Serial.print (posY0);
+  Serial.print (".  negY0 is ");
+  Serial.print (negY0);
+  Serial.print (".  posX0 is ");
+  Serial.print (posX0);
+  Serial.print (".  negX0 is ");
+  Serial.print (negX0);
+  Serial.print (".  posZ0 is ");
+  Serial.print (posZ0);
+  Serial.print (".  negZ0 is ");
+  Serial.println (negZ0);
+
+  Serial.print ("basePosY is ");
+  Serial.print (basePosY);
+  Serial.print (". baseNegY is ");
+  Serial.print (baseNegY);
+  Serial.print (". basePosX is ");
+  Serial.print (basePosX);
+  Serial.print (". baseNegX is ");
+  Serial.println (baseNegX);
+  */
 }
 
 void loop()
@@ -211,7 +242,7 @@ void moveYAxis()
     timeMillis = posYDelay / 1000;
     CounterY = CounterY + 1;
   }
-  else if ((posYRead <= posY0) && (negYRead >= negY0) && (CounterY <= 1050) && (posYRead <= basePosY))
+  else if ((posYRead <= posY0) && (negYRead >= negY0) && (CounterY <= 1050) && (posYRead < basePosY))
   {
     myStepperY.step(1);
     long int posYDelay = (1000000 / (10 + posY0 - basePosY));
@@ -229,7 +260,7 @@ void moveYAxis()
     timeMillis = negYDelay / 1000;
     CounterY = CounterY - 1;
   }
-  else if ((posYRead >= posY0) && (negYRead <= negY0) && (CounterY >= 0) && (negYRead <= baseNegY))
+  else if ((posYRead >= posY0) && (negYRead <= negY0) && (CounterY >= 0) && (negYRead < baseNegY))
   {
     myStepperY.step(-1);
     long int negYDelay = (1000000 / (10 + negY0 - baseNegY));
@@ -262,7 +293,7 @@ void moveXAxis()
     timeMillis = posXDelay / 1000;
     CounterX = CounterX - 1;
   }
-  else if ((negXRead >= negX0) && (posXRead <= posX0) && (CounterX >= 0) && (posXRead <= basePosX))
+  else if ((negXRead >= negX0) && (posXRead <= posX0) && (CounterX >= 0) && (posXRead < basePosX))
   {
     myStepperX.step(1);
     long int posXDelay = (1000000 / (10 + posX0 - basePosX));
@@ -280,7 +311,7 @@ void moveXAxis()
     timeMillis = negXDelay / 1000;
     CounterX = CounterX + 1;
   }
-  else if ((negXRead <= negX0) && (posXRead >= posX0) && (CounterX <= 1000) && (negXRead <= baseNegX))
+  else if ((negXRead <= negX0) && (posXRead >= posX0) && (CounterX <= 1000) && (negXRead < baseNegX))
   {
     myStepperX.step(-1);
     long int negXDelay = (1000000 / (10 + negX0 - baseNegX));
