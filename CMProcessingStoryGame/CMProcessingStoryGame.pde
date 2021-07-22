@@ -13,6 +13,7 @@ PImage CheckMark;
 PImage Scroll;
 PImage Letter;
 PImage Forest;
+PImage Bubble;
 
 
 String[] fontList = PFont.list();
@@ -35,12 +36,17 @@ float CounterLeaf = 0;
 float CounterFlower = 0;
 float CounterBee = 0;
 
+  PFont font;
+  PFont letterfont;
+
 void setup()
 {
   size(1102, 950);
-  PFont font;
+
   font = loadFont("CooperBlack-48.vlw");
-  textFont(font);
+  letterfont = loadFont("VinerHandITC-48.vlw");
+ 
+  
   String portName = Serial.list()[0];
   myPort = new Serial(this, portName, 115200);
  Butterfly = loadImage("Butterfly.png");
@@ -51,6 +57,7 @@ void setup()
  Scroll = loadImage("Scroll.png");
  Letter = loadImage("Letter.png");
  Forest = loadImage("Forest.jpg");
+ Bubble = loadImage("Bubble.png");
  
 }
 
@@ -69,36 +76,53 @@ void draw(){
 
 void WelcomeScreen(){
   background(0);
-  fill(255);
-  rect(300, 200, 450, 200);
+  textFont(font);
   fill(0);
   textSize(32);
   image(Forest, 0, 0, 1300, 1300);
-  text("Welcome to Arborset Forest,", 305, 225);
-  text("a magical place that is home", 305, 265);
-  text("to every insect and plant", 305, 305);
-  text("found on Earth!", 305, 345);
-  image(Scroll, 475, 600, 60, 60);
+  fill(255, 255, 0);
+  rect(300, 200, 450, 200, 12, 12, 12, 12);
+  fill(0); 
+  text("Welcome to Arborset", 350, 230);
+  text("Forest, a magical place", 336, 268);
+  text("that is home to every", 343, 307);
+  text("insect and plant found", 336, 345);
+  text("on Earth!", 430, 385);
+  image(Scroll, 80, 800, 90, 90);
+  image(Bubble, 200, 600, 205, 205);
+  fill(255, 0, 0);
+  text("Urgent!", 223, 678);
    fill(255);
-  //ellipse(480, 610, 15, 15);
-  //ellipse(530, 660, 15, 15);
-  //ellipse(485, 645, 15, 15);
-  //ellipse(525, 620, 15, 15);
+  //ellipse(90, 810, 15, 15);
+  //ellipse(165, 880, 15, 15);
+  //ellipse(100, 875, 15, 15);
+  //ellipse(160, 830, 15, 15);
 }
 
 
 void LetterScreen(){
   background(0);
   image(Letter, 251, 125, 600, 600);
-  fill(0);
-  text("Greetings Doctor,", 300, 270);
-  text("We have an urgent matter, and", 300, 370);
-  text("we need your help...", 300, 425);
+  fill(0);  
+  textFont(letterfont); 
+  textSize(32);
+  text("Greetings Doctor,", 300, 210);
+  text("We have an urgent matter, and", 300, 300);
+  text("we need your help! A virus has", 300, 345);
+  text("been detected within some of the", 300, 390);
+  text("living things in Arborset. We", 300, 435);
+  text("need you to collect samples and", 300, 480);
+  text("study the infected plants and", 300, 525);
+  text("insects. Good luck Doctor and be", 300, 570);
+  text("quick, the virus is spreading", 305, 615);
+  text("rapidly!", 310, 660);
   fill(0, 255, 0);
   rect(446, 800, 180, 80, 12, 12, 12, 12);
-  fill(0);  
-  text("Start", 500, 835); 
-  text("Searching!", 460, 870); 
+  fill(0); 
+  textFont(font);
+  textSize(30);
+  text("Start", 500, 830); 
+  text("Searching!", 460, 865); 
 }
 
 
@@ -182,7 +206,7 @@ if (CounterBee == 1){
 }
 
 void mouseClicked(){
-  if ((mouseX < 530) && (mouseX > 480) && (mouseY < 655) && (mouseY > 610) && (gameScreen == 0)){
+  if ((mouseX < 165) && (mouseX > 90) && (mouseY < 880) && (mouseY > 810) && (gameScreen == 0)){
     startGame();
   }
 }
