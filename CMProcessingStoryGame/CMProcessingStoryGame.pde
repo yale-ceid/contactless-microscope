@@ -14,6 +14,8 @@ PImage Scroll;
 PImage Letter;
 PImage Forest;
 PImage Bubble;
+PImage Grass;
+//PImage Bush;
 
 
 String[] fontList = PFont.list();
@@ -36,8 +38,9 @@ float CounterLeaf = 0;
 float CounterFlower = 0;
 float CounterBee = 0;
 
-  PFont font;
-  PFont letterfont;
+PFont font;
+PFont letterfont;
+PFont gamefont;
 
 void setup()
 {
@@ -45,7 +48,7 @@ void setup()
 
   font = loadFont("CooperBlack-48.vlw");
   letterfont = loadFont("VinerHandITC-48.vlw");
- 
+  gamefont = loadFont("CourierNewPS-BoldMT-48.vlw");
   
   String portName = Serial.list()[0];
   myPort = new Serial(this, portName, 115200);
@@ -58,6 +61,8 @@ void setup()
  Letter = loadImage("Letter.png");
  Forest = loadImage("Forest.jpg");
  Bubble = loadImage("Bubble.png");
+ Grass = loadImage("Grass.jpg");
+ //Bush = loadImage("Bush.png");
  
 }
 
@@ -129,12 +134,21 @@ void LetterScreen(){
 void GameScreen(){
   background(0);
   fill(255);
-  rect(300, 150, 750, 700);
-  rect(50, 300, 200, 400, 12, 12, 12, 12);
-  image(Butterfly, 75, 325, 60, 60);
-  image(Leaf, 75, 425, 60, 60);
-  image(Flower, 75, 525, 60, 60);
-  image(Bee, 75, 625, 60, 60);
+  //rect(300, 150, 750, 700);
+  image(Grass, 300, 150, 750, 700);
+  //image(Bush, 300, 150, 350, 200);
+  fill(195, 155, 119);
+  rect(50, 235, 200, 100, 12, 12, 12, 12); 
+  rect(50, 360, 200, 400, 12, 12, 12, 12);
+  textFont(gamefont);
+  fill(0);
+  textSize(38);
+  text("Field", 90, 275);
+  text("Guide", 91, 315);
+  image(Butterfly, 75, 385, 60, 60);
+  image(Leaf, 75, 485, 60, 60);
+  image(Flower, 75, 585, 60, 60);
+  image(Bee, 75, 685, 60, 60);
   image(Butterfly, 500, 600, 60, 60);
   image(Leaf, 750, 200, 60, 60);
   image(Flower, 350, 300, 60, 60);
@@ -144,42 +158,42 @@ void GameScreen(){
  
 //Butterfly
 if ((X < 555) && (X > 500) && (Y < 650) && (Y > 605) && (CounterButterfly == 0)){
-  image(CheckMark, 150, 325, 60, 60);
+  image(CheckMark, 150, 385, 60, 60);
   CounterButterfly = CounterButterfly + 1;
 }
 
 if (CounterButterfly == 1){
-  image(CheckMark, 150, 325, 60, 60);
+  image(CheckMark, 150, 385, 60, 60);
 }
 
 //Leaf
 if ((X < 805) && (X > 758) && (Y < 255) && (Y > 205) && (CounterLeaf == 0)){
-  image(CheckMark, 150, 425, 60, 60);
+  image(CheckMark, 150, 485, 60, 60);
   CounterLeaf = CounterLeaf + 1;
 }
 
 if (CounterLeaf == 1){
-  image(CheckMark, 150, 425, 60, 60);
+  image(CheckMark, 150, 485, 60, 60);
 }
 
 //Flower
 if ((X < 410) && (X > 350) && (Y < 360) && (Y > 300) && (CounterFlower == 0)){
-  image(CheckMark, 150, 525, 60, 60);
+  image(CheckMark, 150, 585, 60, 60);
   CounterFlower = CounterFlower + 1;
 }
 
 if (CounterFlower == 1){
-    image(CheckMark, 150, 525, 60, 60);
+    image(CheckMark, 150, 585, 60, 60);
 }
 
 //Bee
 if ((X < 950) && (X > 910) && (Y < 750) && (Y > 710) && (CounterBee == 0)){
-  image(CheckMark, 150, 625, 60, 60);
+  image(CheckMark, 150, 685, 60, 60);
   CounterBee = CounterBee + 1;
 }
 
 if (CounterBee == 1){
-    image(CheckMark, 150, 625, 60, 60);
+    image(CheckMark, 150, 685, 60, 60);
 }
   
 //  print("hi");
